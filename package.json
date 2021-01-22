@@ -1,0 +1,11 @@
+{
+  "name": "masjidapp",
+  "version": "1.0.0",
+  "description": "An app to book space in the masjid",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ridwan and Abdulateef",
+  "license": "ISC"
+}
