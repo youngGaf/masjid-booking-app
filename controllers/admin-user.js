@@ -1,4 +1,6 @@
 const User =  require('../model/user-schema');
+const Solah = require('../model/solat-time');
+const Booking = require('../model/booking-schema');
 const { errorResponseMsg, successResponseMsg } = require('../utils/response');
 
 
@@ -37,6 +39,29 @@ module.exports = {
       } catch (error) {
         return errorResponseMsg(res, 500, error.message);
       }
-    
-  }
+    },
+
+    adminAddSolah: async (req, res) =>{
+      try {
+        const { prayer, time, batch } = req.body;
+        const registerSolah = await Solah.create({ prayer, time, batch });
+
+        if(!registerSolah) return errorResponseMsg(res, 400, 'Error registering solat time');
+
+        return successResponseMsg(res, 200, 'Successfully added prayer time', registerSolah);
+
+      } catch (error) {
+        return errorResponseMsg(res, 500, error.message);
+      }
+    },
+
+    adminGetAllBookings: async (req, res) => {
+      try {
+        const allBookings = await Booking.find();
+        
+        return successResponseMsg(res, 200, 'Successfully fetched all bookings', allBookings); 
+      } catch (error) {
+        return errorResponseMsg(res, 500, error.message);
+      }
+    }
 }
