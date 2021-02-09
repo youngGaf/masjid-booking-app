@@ -62,5 +62,24 @@ module.exports = {
         } catch (error) {
             return errorResponseMsg(res, 500, error.message);
         }
-    }
+    },
+
+    bookingList: async (req, res) =>{
+        try {
+            const { batch, prayer } = req.query;
+
+            const bookingDate = moment().format('DD/MM/YYYY');
+
+            const bookingList = await Booking.find({batch, prayer, bookingDate})
+    
+            if(bookingList.length === 0) return errorResponseMsg(res, 400, 'No bookings available for this time', bookingList);
+    
+            return successResponseMsg(res, 200, 'Booking list fetched successfully', bookingList);
+            
+        } catch (error) {
+            return errorResponseMsg(res, 500, error.message);  
+        }
+
+
+    } 
 }
