@@ -2,7 +2,7 @@ const User =  require('../model/user-schema');
 const Solah = require('../model/solat-time');
 const Booking = require('../model/booking-schema');
 const { errorResponseMsg, successResponseMsg } = require('../utils/response');
-
+const moment = require('moment');
 
 module.exports = {
     adminAddUser: async (req, res) => {
@@ -30,6 +30,7 @@ module.exports = {
         }
       
     },
+
     adminGetUsers: async (req, res) => {
       try {
         // find all users in db and send response back to admin
@@ -43,8 +44,12 @@ module.exports = {
 
     adminAddSolah: async (req, res) =>{
       try {
-        const { prayer, time, batch } = req.body;
-        const registerSolah = await Solah.create({ prayer, time, batch });
+        const { prayer, time, batch, batches } = req.body;
+
+        const registeredDate = moment().format('DD/MM/YYYY');
+
+        const registerSolah = await Solah.create({ prayer, time, batch, batches, registeredDate });
+        
 
         if(!registerSolah) return errorResponseMsg(res, 400, 'Error registering solat time');
 
@@ -55,9 +60,39 @@ module.exports = {
       }
     },
 
+    adminGetSolah: async (req, res) =>{
+      try {
+        const allSolah = await Solah.find();
+      
+        if(allSolah.length < 1) return successResponseMsg(res, 200, 'No registered solat time');
+
+        return successResponseMsg(res, 200, 'Successfully fetched all registered prayer time', allSolah);
+
+      } catch (error) {
+        return errorResponseMsg(res, 500, error.message);
+      }
+    },
+
+    adminDeleteSolah: async (req, res) =>{
+      try {
+        const allSolah = await Solah.deleteMany();
+      
+        if(!allSolah) return successResponseMsg(res, 200, 'No registered solat time');
+
+        return successResponseMsg(res, 200, 'Successfully deleted all registered prayer time', allSolah);
+
+      } catch (error) {
+        return errorResponseMsg(res, 500, error.message);
+      }
+    },
+
     adminGetAllBookings: async (req, res) => {
       try {
         const allBookings = await Booking.find();
+
+        // allBookings.forEach(bookings =>{
+        //   console.log(moment(bookings.createdAt).format('DD/MM/YYYY'));
+        // })
         
         return successResponseMsg(res, 200, 'Successfully fetched all bookings', allBookings); 
       } catch (error) {

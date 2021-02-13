@@ -1,7 +1,7 @@
 const Booking = require('../model/booking-schema');
 const User = require('../model/user-schema');
 const { errorResponseMsg, successResponseMsg } = require('../utils/response');
-const { findAlreadyBookedUser } = require('../utils/find-booked-user');
+const { findAlreadyBookedUser } = require('../utils/user-util');
 const moment = require('moment');
 
 
@@ -80,6 +80,6 @@ module.exports = {
             return errorResponseMsg(res, 500, error.message);  
         }
 
-
-    } 
+    }  
+    
 }

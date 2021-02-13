@@ -11,7 +11,14 @@ const solatSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    batches: {
+        type: String,
+        required: true
+    },
     time:{
+        type: String
+    },
+    registeredDate:{
         type: String
     },
 }, {
