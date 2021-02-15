@@ -49,7 +49,7 @@ module.exports ={
             // Get all solat for today and sort in place
             const todaySolat = await Solah.find({ registeredDate });
 
-            if(todaySolat.length < 1) return errorResponseMsg(res, 404, 'No booking data for today', data);
+            if(todaySolat.length < 1) return errorResponseMsg(res, 200, 'No booking data for today', data);
 
             todaySolat.sort(comparator);
 
