@@ -5,7 +5,7 @@ const solatSchema = new mongoose.Schema({
     prayer: {
         type: String,
         required: true,
-        enum: ['subhi', 'zuhur', 'asr', 'maghrib', 'ishai', 'jummah']
+        enum: ['subhi', 'zuhur', 'sunrise', 'asr', 'maghrib', 'ishai', 'jummah']
     },
     batch: {
         type: String,

@@ -5,10 +5,11 @@ const {
     adminDeleteSolah, adminGetSolah 
 } = require('../controllers/admin-user');
 const { userBooking, userUnbook, bookingList } =require('../controllers/user-controller');
-const { solatTime } = require('../controllers/index');
+const { solatTime, solatToday } = require('../controllers/index');
 
 // Index
 router.get('/index', solatTime);
+router.get('/solat-today', solatToday);
 
 
 // Admin

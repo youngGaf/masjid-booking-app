@@ -1,4 +1,3 @@
-const User =  require('../model/user-schema');
 const Solah = require('../model/solat-time');
 const Booking = require('../model/booking-schema');
 const { errorResponseMsg, successResponseMsg } = require('../utils/response');
@@ -42,14 +41,14 @@ module.exports ={
             const currentTime = moment().format('HH:mm');
 
             const data = {
-                solat: {prayer: 'subhi'},
+                solat: {prayer: 'subhi', time: currentTime},
                 bookingCount: [0,0,0,0]
             }
 
             // Get all solat for today and sort in place
             const todaySolat = await Solah.find({ registeredDate });
 
-            if(todaySolat.length < 1) return errorResponseMsg(res, 200, 'No booking data for today', data);
+            if(todaySolat.length < 1) return successResponseMsg(res, 200, 'No booking data for today', data);
 
             todaySolat.sort(comparator);
 
@@ -59,11 +58,26 @@ module.exports ={
                     const data = await countBookings(todaySolat[i], registeredDate);
                     return successResponseMsg(res, 200, 'Booking count data loaded successfully', data)
                 }else if((todaySolat[i].time < currentTime) && (i === todaySolat.length - 1)){
-                    console.log(data);
                     return successResponseMsg(res, 200, 'No more solat available for today', data);
                 }
             }
 
+        } catch (error) {
+            return errorResponseMsg(res, 500, error.message);
+        }
+    },
+
+    solatToday: async(req, res) =>{
+        try {
+            const registeredDate = moment().format('DD/MM/YYYY');
+
+            const todaySolat = await Solah.find({ registeredDate, batch: '1'});
+    
+            if(todaySolat.length < 1) return successResponseMsg(res, 200, 'No solat registered for today');
+    
+            todaySolat.sort(comparator);
+            
+            return successResponseMsg(res, 200, 'Sucessfully fetched all registered solat for today', todaySolat);
         } catch (error) {
             return errorResponseMsg(res, 500, error.message);
         }
