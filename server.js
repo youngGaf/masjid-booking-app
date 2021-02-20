@@ -2,8 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const database = require('./model/database-connection')
+const database = require('./model/db/database-connection')
 const logger = require('morgan');
+const { seedAdminUser } = require('./model/db/seed-admin')
 dotenv.config();
 
 const app = express();
@@ -24,5 +25,7 @@ app.listen(PORT, async () => {
    await database.connect(); 
    console.log(`Server running on port ${PORT}....`)
 });
+
+seedAdminUser();
 
 app.use('/api/v1', indexRoutes);

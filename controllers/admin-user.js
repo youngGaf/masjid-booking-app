@@ -1,10 +1,38 @@
 const User =  require('../model/user-schema');
 const Solah = require('../model/solat-time');
 const Booking = require('../model/booking-schema');
-const { errorResponseMsg, successResponseMsg } = require('../utils/response');
+const Admin = require('../model/admin-schema');
+const { errorResponseMsg, successResponseMsg, sessionSuccessResponseMsg } = require('../utils/response');
+const { signJWT } = require('../utils/auth-token');
+const { comparePassword } = require('../utils/hash')
 const moment = require('moment');
 
 module.exports = {
+    adminLogin: async (req,res) => {
+        try {
+          const { password, email } = req.body;
+          const adminExist = await Admin.findOne({ email });
+
+          if (!adminExist) {
+            return errorResponseMsg(res, 401, 'Invalid email or password');
+          }
+          const passwordCheck = await comparePassword(password, adminExist.password);
+    
+          if (!passwordCheck) {
+            return errorResponseMsg(res, 401, 'Invalid email or password');
+          }
+          console.log(adminExist)
+          const token = signJWT({
+            email,
+            user: adminExist.id
+          });
+          return sessionSuccessResponseMsg(res, 200, 'Login successful', token, adminExist);
+
+        } catch (error) {
+          return errorResponseMsg(res, 500, error.message);
+        }
+    },
+
     adminAddUser: async (req, res) => {
         try {
           // get data from body
