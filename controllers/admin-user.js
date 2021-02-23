@@ -10,23 +10,24 @@ const moment = require('moment');
 module.exports = {
     adminLogin: async (req,res) => {
         try {
+          
           const { password, email } = req.body;
-          const adminExist = await Admin.findOne({ email });
+          const adminExist = await Admin.findOne({ email: email });
 
           if (!adminExist) {
             return errorResponseMsg(res, 401, 'Invalid email or password');
           }
+          
           const passwordCheck = await comparePassword(password, adminExist.password);
     
           if (!passwordCheck) {
             return errorResponseMsg(res, 401, 'Invalid email or password');
           }
-          console.log(adminExist)
           const token = signJWT({
             email,
             user: adminExist.id
           });
-          return sessionSuccessResponseMsg(res, 200, 'Login successful', token, adminExist);
+          return sessionSuccessResponseMsg(res, 200, 'Login successful', token, adminExist.email);
 
         } catch (error) {
           return errorResponseMsg(res, 500, error.message);
@@ -72,9 +73,9 @@ module.exports = {
 
     adminAddSolah: async (req, res) =>{
       try {
-        const { prayer, time, batch, batches } = req.body;
+        const { prayer, time, batch, batches, date } = req.body;
 
-        const registeredDate = moment().format('DD/MM/YYYY');
+        const registeredDate = moment(date).format('DD/MM/YYYY');
 
         const registerSolah = await Solah.create({ prayer, time, batch, batches, registeredDate });
         
@@ -117,10 +118,6 @@ module.exports = {
     adminGetAllBookings: async (req, res) => {
       try {
         const allBookings = await Booking.find();
-
-        // allBookings.forEach(bookings =>{
-        //   console.log(moment(bookings.createdAt).format('DD/MM/YYYY'));
-        // })
         
         return successResponseMsg(res, 200, 'Successfully fetched all bookings', allBookings); 
       } catch (error) {

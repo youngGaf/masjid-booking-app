@@ -72,7 +72,7 @@ module.exports ={
             const registeredDate = moment().format('DD/MM/YYYY');
 
             const todaySolat = await Solah.find({ registeredDate, batch: '1'});
-    
+            
             if(todaySolat.length < 1) return successResponseMsg(res, 200, 'No solat registered for today');
     
             todaySolat.sort(comparator);
