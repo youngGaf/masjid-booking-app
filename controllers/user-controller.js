@@ -16,6 +16,8 @@ module.exports = {
             
             const userId = emailExists._id;
 
+            if(prayer.toString() === 'Current time') return errorResponseMsg(res, 400,  'Sorry you can not book at this time, please try again later :)..');
+
             // check if user already booked
             const userBooked = await findAlreadyBookedUser(userId, prayer);
             
@@ -44,7 +46,7 @@ module.exports = {
             if(!emailExists) return errorResponseMsg(res, 400, 'Sorry brother your email is not registered. Please contact admin');
             
             const userId = emailExists._id;
-
+            
             // check if user already booked
             const userBooked = await findAlreadyBookedUser(userId, prayer);
 

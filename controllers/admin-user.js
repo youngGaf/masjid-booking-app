@@ -91,7 +91,7 @@ module.exports = {
 
     adminGetSolah: async (req, res) =>{
       try {
-        const allSolah = await Solah.find();
+        const allSolah = await Solah.find().limit(15);
       
         if(allSolah.length < 1) return successResponseMsg(res, 200, 'No registered solat time');
 

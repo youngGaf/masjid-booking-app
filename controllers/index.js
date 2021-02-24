@@ -41,7 +41,7 @@ module.exports ={
             const currentTime = moment().format('HH:mm');
 
             const data = {
-                solat: {prayer: 'subhi', time: currentTime},
+                solat: {prayer: 'Current time', time: currentTime},
                 bookingCount: [0,0,0,0]
             }
 
