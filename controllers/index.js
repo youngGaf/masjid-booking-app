@@ -5,8 +5,8 @@ const { comparator } = require('../utils/user-util');
 const moment = require('moment');
 
 // Determine the bookings count for each batch
-const countBookings = async (solat, registeredDate) => {
-        const bookings = await Booking.find({ prayer: solat.prayer, registeredDate});
+const countBookings = async (solat, bookingDate) => {
+        const bookings = await Booking.find({ prayer: solat.prayer, bookingDate});
         
         var count1 = 0, count2=0, count3 =0, count4 =0;
         

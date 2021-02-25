@@ -35,8 +35,8 @@ module.exports = {
         const todayDate = moment().format('DD/MM/YYYY');
 
         const todayPrayer = await Booking.find({ bookingDate: todayDate, batch, prayer });
-
-        if(todayPrayer.lenght === 7){
+        
+        if(todayPrayer.length >= 7){
             return true;
         }else{
             return false;

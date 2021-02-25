@@ -13,7 +13,8 @@ module.exports = {
             const emailExists = await User.findOne({ email });
             if(!emailExists) return errorResponseMsg(res, 400, 'Sorry brother your email is not registered. Please contact admin');
 
-            const bookingLimit = checkBookingLimit(batch, prayer);
+            const bookingLimit = await checkBookingLimit(batch, prayer);
+            console.log(bookingLimit);
             if(bookingLimit) return errorResponseMsg(res, 400, `Sorry batch${batch} already filled, try booking with the next batch`)
             
             const userId = emailExists._id;
