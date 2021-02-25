@@ -5,8 +5,8 @@ const { comparator } = require('../utils/user-util');
 const moment = require('moment');
 
 // Determine the bookings count for each batch
-const countBookings = async (solat) => {
-        const bookings = await Booking.find({ prayer: solat.prayer});
+const countBookings = async (solat, registeredDate) => {
+        const bookings = await Booking.find({ prayer: solat.prayer, registeredDate});
         
         var count1 = 0, count2=0, count3 =0, count4 =0;
         
@@ -37,6 +37,10 @@ const countBookings = async (solat) => {
 module.exports ={
     solatTime: async(req, res) =>{
         try {
+            const bookingDate = moment().format('DD/MM/YYYY');
+            const tommorrowDate = moment().add(1, 'days').format('DD/MM/YYYY');
+
+            console.log(tommorrowDate);
             const currentTime = moment().format('HH:mm');
 
             const data = {
@@ -54,10 +58,11 @@ module.exports ={
             for(let i=0; i<todaySolat.length; i++){
 
                 if(currentTime <= todaySolat[i].time){
-                    const data = await countBookings(todaySolat[i]);
+                    const data = await countBookings(todaySolat[i], bookingDate);
                     return successResponseMsg(res, 200, 'Booking count data loaded successfully', data)
                 }else if((i === todaySolat.length - 1)){
-                    return successResponseMsg(res, 200, 'No more solat available for today', {solat: todaySolat[0], bookingCount: [0,0,0,0]});
+                    const data = await countBookings(todaySolat[0], tommorrowDate);
+                    return successResponseMsg(res, 200, 'No more solat available for today', data);
                 }
             }
 
