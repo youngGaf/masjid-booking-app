@@ -38,9 +38,6 @@ module.exports ={
     solatTime: async(req, res) =>{
         try {
             const bookingDate = moment().format('DD/MM/YYYY');
-            const tommorrowDate = moment().add(1, 'days').format('DD/MM/YYYY');
-
-            console.log(tommorrowDate);
             const currentTime = moment().format('HH:mm');
 
             const data = {
@@ -61,8 +58,7 @@ module.exports ={
                     const data = await countBookings(todaySolat[i], bookingDate);
                     return successResponseMsg(res, 200, 'Booking count data loaded successfully', data)
                 }else if((i === todaySolat.length - 1)){
-                    const data = await countBookings(todaySolat[0], tommorrowDate);
-                    return successResponseMsg(res, 200, 'No more solat available for today', data);
+                    return successResponseMsg(res, 200, 'No more solat available for today', {solat: todaySolat[0], bookingCount: [0,0,0,0,0]});
                 }
             }
 
