@@ -77,6 +77,14 @@ module.exports = {
 
         const registeredDate = moment(date).format('DD/MM/YYYY');
 
+        // check if the solah was already registered and update
+        const existingSolah = await Solah.find({prayer, batch});
+        if(existingSolah.length > 0){
+          const update = await Solah.findOneAndUpdate({prayer, batch}, {time, date})
+          return successResponseMsg(res, 200, 'Successfully updated existing prayer time', update);
+        }
+
+        // Create new solah if solah has never been registered
         const registerSolah = await Solah.create({ prayer, time, batch, batches, registeredDate });
         
 

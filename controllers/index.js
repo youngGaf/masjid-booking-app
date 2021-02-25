@@ -37,7 +37,6 @@ const countBookings = async (solat, date) => {
 module.exports ={
     solatTime: async(req, res) =>{
         try {
-            const registeredDate = moment().format('DD/MM/YYYY');
             const currentTime = moment().format('HH:mm');
 
             const data = {
@@ -46,7 +45,7 @@ module.exports ={
             }
 
             // Get all solat for today and sort in place
-            const todaySolat = await Solah.find({ registeredDate });
+            const todaySolat = await Solah.find();
 
             if(todaySolat.length < 1) return successResponseMsg(res, 200, 'No booking data for today', data);
 
@@ -69,9 +68,7 @@ module.exports ={
 
     solatToday: async(req, res) =>{
         try {
-            const registeredDate = moment().format('DD/MM/YYYY');
-
-            const todaySolat = await Solah.find({ registeredDate, batch: '1'});
+            const todaySolat = await Solah.find({ batch: '1'});
             
             if(todaySolat.length < 1) return successResponseMsg(res, 200, 'No solat registered for today');
     
