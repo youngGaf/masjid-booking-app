@@ -1,7 +1,7 @@
 const Booking = require('../model/booking-schema');
 const User = require('../model/user-schema');
 const { errorResponseMsg, successResponseMsg } = require('../utils/response');
-const { findAlreadyBookedUser } = require('../utils/user-util');
+const { findAlreadyBookedUser, checkBookingLimit } = require('../utils/user-util');
 const moment = require('moment');
 
 
@@ -11,12 +11,12 @@ module.exports = {
             const { email, prayer, batch } = req.body;
 
             const emailExists = await User.findOne({ email });
-
             if(!emailExists) return errorResponseMsg(res, 400, 'Sorry brother your email is not registered. Please contact admin');
+
+            const bookingLimit = checkBookingLimit(batch, prayer);
+            if(bookingLimit) return errorResponseMsg(res, 400, `Sorry batch${batch} already filled, try booking with the next batch`)
             
             const userId = emailExists._id;
-
-            if(prayer.toString() === 'Current time') return errorResponseMsg(res, 400,  'Sorry you can not book at this time, please try again later :)..');
 
             // check if user already booked
             const userBooked = await findAlreadyBookedUser(userId, prayer);

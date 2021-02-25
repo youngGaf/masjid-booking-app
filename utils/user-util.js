@@ -29,9 +29,17 @@ module.exports = {
             return -1;
         }
         return 0;
-    }
+    },
     
-    // checkBookingLimit: async(batch, prayer) => {
+    checkBookingLimit: async(batch, prayer) => {
+        const todayDate = moment().format('DD/MM/YYYY');
 
-    // }
+        const todayPrayer = await Booking.find({ bookingDate: todayDate, batch, prayer });
+
+        if(todayPrayer.lenght === 7){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
